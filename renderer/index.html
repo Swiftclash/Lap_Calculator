@@ -1,0 +1,186 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>LapDash</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+
+  <body>
+    <div class="app">
+      <div class="left">
+        <div class="panel">
+          <div class="panelTitle">Circuit</div>
+
+          <div class="row">
+            <label>Circuit_name</label>
+            <select id="circuitSelect"></select>
+          </div>
+
+          <div class="row">
+            <label>Competition_group</label>
+            <select id="groupSelect"></select>
+          </div>
+
+          <div class="circuitBox">
+            <div class="circuitPicture">
+              <img id="circuitImg" alt="Circuit Picture" />
+              <div class="imgPlaceholder" id="imgPlaceholder">Circuit Picture</div>
+            </div>
+            <div class="hint" id="circuitNote"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panelTitle">Best_Records</div>
+          <table class="miniTable">
+            <thead>
+              <tr><th>#</th><th>Date</th><th>Speed</th><th>Car</th></tr>
+            </thead>
+            <tbody id="bestRecordsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="right panel big">
+        <div class="header">
+          <div class="title">Current_Pace</div>
+          <button id="finishBtn" class="finish">Finish</button>
+        </div>
+
+        <div class="paceTableWrap">
+          <table class="paceTable paceHeader">
+          <colgroup>
+            <col style="width:140px;" />
+            <col style="width:calc((100% - 140px) / 5);" />
+            <col style="width:calc((100% - 140px) / 5);" />
+            <col style="width:calc((100% - 140px) / 5);" />
+            <col style="width:calc((100% - 140px) / 5);" />
+            <col style="width:calc((100% - 140px) / 5);" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th style="width:140px;">Lap: n</th>
+              <th>Lap_speed</th>
+              <th>Sector1</th>
+              <th>Sector2</th>
+              <th>Sector3</th>
+              <th>Gap</th>
+            </tr>
+          </thead>
+          </table>
+
+          <div class="paceScroll" id="paceScroll">
+            <table class="paceTable paceBodyTable">
+              <colgroup>
+                <col style="width:140px;" />
+                <col style="width:calc((100% - 140px) / 5);" />
+                <col style="width:calc((100% - 140px) / 5);" />
+                <col style="width:calc((100% - 140px) / 5);" />
+                <col style="width:calc((100% - 140px) / 5);" />
+                <col style="width:calc((100% - 140px) / 5);" />
+              </colgroup>
+              <tbody id="paceBody">
+            <tr>
+              <td class="lapLabel">Lap1</td>
+              <td><input class="cellInput" placeholder="00:00:000" /></td>
+              <td><input class="cellInput" placeholder="00:00:000" /></td>
+              <td><input class="cellInput" placeholder="00:00:000" /></td>
+              <td><input class="cellInput" placeholder="00:00:000" /></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="lapLabel">Lap2</td>
+              <td><input class="cellInput" placeholder="00:00:000" /></td>
+              <td><input class="cellInput" placeholder="00:00:000" /></td>
+              <td><input class="cellInput" placeholder="00:00:000" /></td>
+              <td><input class="cellInput" placeholder="00:00:000" /></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="lapLabel">Lap3</td>
+              <td><input class="cellInput" placeholder="00:00:000" /></td>
+              <td><input class="cellInput" placeholder="00:00:000" /></td>
+              <td><input class="cellInput" placeholder="00:00:000" /></td>
+              <td><input class="cellInput" placeholder="00:00:000" /></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="lapLabel">...</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="lapLabel">Lap N</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+            </table>
+          </div>
+
+          <table class="paceTable paceSummary">
+            <colgroup>
+              <col style="width:140px;" />
+              <col style="width:calc((100% - 140px) / 5);" />
+              <col style="width:calc((100% - 140px) / 5);" />
+              <col style="width:calc((100% - 140px) / 5);" />
+              <col style="width:calc((100% - 140px) / 5);" />
+              <col style="width:calc((100% - 140px) / 5);" />
+            </colgroup>
+            <tbody id="summaryBody">
+              <tr class="summaryRow">
+                <td>Fastest_Lap</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr class="summaryRow">
+                <td>Sum of Best</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr class="summaryRow">
+                <td>Average</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr class="summaryRow">
+                <td>World Record</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="footer">
+          <div class="footerLine">
+            <span>Date: <span id="dateText"></span></span>
+            <span>Time: <span id="timeText"></span></span>
+            <span>Weather: <input id="weatherInput" placeholder="------" /></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./renderer.js"></script>
+  </body>
+</html>
