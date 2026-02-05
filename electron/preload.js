@@ -17,5 +17,6 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.invoke("db:listBestRecords", circuitName, groupName, limit),
   insertBestRecord: (payload) => ipcRenderer.invoke("db:insertBestRecord", payload),
   saveCurrentPaceMarkdown: (payload) =>
-    ipcRenderer.invoke("file:saveCurrentPaceMarkdown", payload)
+    ipcRenderer.invoke("file:saveCurrentPaceMarkdown", payload),
+  getDataDir: () => ipcRenderer.invoke("app:getDataDir")
 });

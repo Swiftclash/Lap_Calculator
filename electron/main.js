@@ -10,7 +10,14 @@ function resolvePortableDataDir() {
   // LAPDASH_DATA_DIR="/some/path" npm start
   if (process.env.LAPDASH_DATA_DIR) return process.env.LAPDASH_DATA_DIR;
 
-  // Always store data under project root ./data
+  // In local/dev runs, bind data to the project cwd so sqlite edits in this repo
+  // are always reflected by the running app.
+  const cwdData = path.join(process.cwd(), "data");
+  if (fs.existsSync(path.join(process.cwd(), "package.json"))) {
+    return cwdData;
+  }
+
+  // Fallback for packaged runtime.
   return path.join(app.getAppPath(), "data");
 }
 
@@ -32,7 +39,8 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
-      nodeIntegration: false
+      nodeIntegration: false,
+      sandbox: false
     }
   });
 
@@ -45,6 +53,11 @@ function createWindow() {
   win.webContents.on("render-process-gone", (_e, details) => {
     console.error("render-process-gone:", details);
     dialog.showErrorBox("Renderer crashed", JSON.stringify(details, null, 2));
+  });
+
+  win.webContents.on("preload-error", (_e, preloadPath, error) => {
+    console.error("preload-error:", preloadPath, error);
+    dialog.showErrorBox("Preload failed", `${preloadPath}\n${error}`);
   });
 
   win.loadFile(path.join(__dirname, "../renderer/index.html"));
@@ -102,3 +115,5 @@ ipcMain.handle("file:saveCurrentPaceMarkdown", (_e, payload) => {
   fs.writeFileSync(outPath, String(markdown), "utf8");
   return { path: outPath, filename };
 });
+
+ipcMain.handle("app:getDataDir", () => dataDir);

@@ -163,6 +163,10 @@ function buildBestRecords(records) {
 }
 
 async function refreshCircuitSelect() {
+  if (!window.api || typeof window.api.listCircuits !== "function") {
+    throw new Error("window.api.listCircuits is unavailable (preload not connected)");
+  }
+
   const circuits = await window.api.listCircuits();
   el.circuitSelect.innerHTML = "";
   for (const c of circuits) {
@@ -725,7 +729,16 @@ async function init() {
   el.finishBtn.addEventListener("click", onFinish);
   window.addEventListener("resize", () => rebuildPaceTable());
 
-  await refreshCircuitSelect();
+  try {
+    const dataDir = window.api && typeof window.api.getDataDir === "function"
+      ? await window.api.getDataDir()
+      : "(unknown)";
+    console.log("[LapDash] dataDir:", dataDir);
+    await refreshCircuitSelect();
+  } catch (err) {
+    console.error("[LapDash] init failed:", err);
+    alert(`Database load failed.\n${err.message || err}`);
+  }
 }
 
 init();
